@@ -13,37 +13,34 @@ import java.util.List;
 public class AmeacaAdapter extends BaseAdapter {
 
     LayoutInflater inflater;
-    List<Ameaca> ameacas;
+    AmeacasSQLiteDatabase db;
 
-    SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
-
-    public AmeacaAdapter(Context context, List<Ameaca> ameacas) {
-        this.inflater = LayoutInflater.from(context);
-        this.ameacas = ameacas;
+    public AmeacaAdapter(Context ctx, AmeacasSQLiteDatabase db) {
+        inflater = LayoutInflater.from(ctx);
+        this.db = db;
     }
-
 
     @Override
     public int getCount() {
-        return ameacas.size();
+        return db.getAmeacas().size();
     }
 
     @Override
     public Object getItem(int position) {
-        return ameacas.get(position);
+        return db.getAmeacas().get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return position;
+        return db.getAmeacas().get(position).getId();
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View view = inflater.inflate(R.layout.ameaca_item, null);
+    public View getView(int position, View view, ViewGroup parent) {
+        view = inflater.inflate(R.layout.ameaca_item, null);
         TextView textDescricao = view.findViewById(R.id.textDescricaoItem);
         TextView textData = view.findViewById(R.id.textDataItem);
-        Ameaca ameaca = ameacas.get(position);
+        Ameaca ameaca = db.getAmeacas().get(position);
         textDescricao.setText(ameaca.getDescricao());
         textData.setText(ameaca.getData());
         return view;

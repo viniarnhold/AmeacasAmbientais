@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.sql.Date;
@@ -18,10 +19,9 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     public ListView listViewAmeaca;
-    public List<Ameaca> ameacas = new ArrayList<>();
     public AmeacaAdapter ameacaAdapter;
 
-    AmeacasSQLiteDatabase db;
+    public AmeacasSQLiteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,26 +29,37 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         db = new AmeacasSQLiteDatabase(getBaseContext());
-        Ameaca ameaca = new Ameaca();
-        ameaca.setEndereco("Rua Madrid 18");
-        ameaca.setData("17/02/1998");
-        ameaca.setDescricao("Teste do banco");
-        Long num = db.addAmeaca(ameaca);
-        Ameaca ameaca1 = db.getAmeaca(num);
-        Log.d("LIST INFO ", ameaca1.toString());
-        ameacas = db.getAmeacas();
+
         listViewAmeaca = findViewById(R.id.listViewAmeacas);
-        ameacaAdapter = new AmeacaAdapter(getBaseContext(), ameacas);
+        ameacaAdapter = new AmeacaAdapter(getBaseContext(), db);
         listViewAmeaca.setAdapter(ameacaAdapter);
+
+        listViewAmeaca.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                abrirAtualizar(id);
+            }
+        });
+
+        listViewAmeaca.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                db.removeAmeaca((Ameaca) ameacaAdapter.getItem(position));
+                ameacaAdapter.notifyDataSetChanged();
+                return true;
+            }
+        });
     }
 
     public void abrirCadastro(View view) {
         Intent intent = new Intent(getBaseContext(), Cadastro.class);
         startActivity(intent);
+        ameacaAdapter.notifyDataSetChanged();
     }
 
-    public void abrirAtualizar(View view) {
+    public void abrirAtualizar(Long id) {
         Intent intent = new Intent(getBaseContext(), Atualizacao.class);
+        intent.putExtra("ID", id);
         startActivity(intent);
     }
 }
