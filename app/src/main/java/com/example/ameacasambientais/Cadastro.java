@@ -1,5 +1,6 @@
 package com.example.ameacasambientais;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -32,7 +33,7 @@ public class Cadastro extends AppCompatActivity {
         ameaca.setEndereco(txtEndereco.getText().toString());
 
         db.addAmeaca(ameaca);
-        notifyAll();
+        setResult(Activity.RESULT_OK);
         finish();
     }
 }

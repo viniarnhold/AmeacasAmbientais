@@ -1,26 +1,21 @@
 package com.example.ameacasambientais;
 
-import androidx.appcompat.app.ActionBar;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-
-import java.sql.Date;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     public ListView listViewAmeaca;
     public AmeacaAdapter ameacaAdapter;
-
+    public ActivityResultLauncher<Intent> activityResultLauncher;
     public AmeacasSQLiteDatabase db;
 
     @Override
@@ -49,17 +44,24 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        activityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        ameacaAdapter.notifyDataSetChanged();
+                    }
+                });
     }
 
     public void abrirCadastro(View view) {
         Intent intent = new Intent(getBaseContext(), Cadastro.class);
-        startActivity(intent);
-        ameacaAdapter.notifyDataSetChanged();
+        activityResultLauncher.launch(intent);
     }
 
     public void abrirAtualizar(Long id) {
         Intent intent = new Intent(getBaseContext(), Atualizacao.class);
         intent.putExtra("ID", id);
-        startActivity(intent);
+        activityResultLauncher.launch(intent);
     }
 }

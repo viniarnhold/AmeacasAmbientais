@@ -1,5 +1,6 @@
 package com.example.ameacasambientais;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -36,7 +37,7 @@ public class Atualizacao extends AppCompatActivity {
         ameaca.setData(txtData.getText().toString());
         ameaca.setEndereco(txtEndereco.getText().toString());
         db.updateAmeaca(ameaca);
-        notifyAll();
+        setResult(Activity.RESULT_OK);
         finish();
     }
 }
