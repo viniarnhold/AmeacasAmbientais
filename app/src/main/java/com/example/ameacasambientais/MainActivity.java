@@ -1,17 +1,18 @@
 package com.example.ameacasambientais;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.firebase.ui.database.FirebaseListOptions;
@@ -45,8 +46,14 @@ public class MainActivity extends AppCompatActivity {
             protected void populateView(View v, Ameaca model, int position) {
                 TextView textDescricao = v.findViewById(R.id.textDescricaoItem);
                 TextView textData = v.findViewById(R.id.textDataItem);
+                ImageView imagemItem = v.findViewById(R.id.imageViewItem);
                 textDescricao.setText(model.getDescricao());
                 textData.setText(model.getData());
+                if(model.getImagem() != null){
+                    byte imagemData[] = Base64.decode(model.getImagem(), Base64.DEFAULT);
+                    Bitmap img = BitmapFactory.decodeByteArray(imagemData, 0, imagemData.length);
+                    imagemItem.setImageBitmap(img);
+                }
             }
         };
         ameacaAdapter.startListening();

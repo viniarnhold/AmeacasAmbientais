@@ -1,23 +1,23 @@
 package com.example.ameacasambientais;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class Ameaca implements Serializable {
     private String key;
     private String endereco;
     private String data;
     private String descricao;
+    private String imagem;
 
     public Ameaca() {
     }
 
-    public Ameaca(String key, String endereco, String data, String descricao) {
+    public Ameaca(String key, String endereco, String data, String descricao, String imagem) {
         this.key = key;
         this.endereco = endereco;
         this.data = data;
         this.descricao = descricao;
+        this.imagem = imagem;
     }
 
     public String getEndereco() {
@@ -50,6 +50,14 @@ public class Ameaca implements Serializable {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public String getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
     }
 
     @Override
