@@ -10,6 +10,9 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -17,7 +20,9 @@ public class Cadastro extends AppCompatActivity {
 
     Calendar myCalendar = Calendar.getInstance();
 
-    AmeacasSQLiteDatabase db;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference root = database.getReference();
+    DatabaseReference ameacas = root.child(MainActivity.AMEACAS_KEY);
     EditText txtDescricao, txtData, txtEndereco;
 
     @Override
@@ -40,8 +45,6 @@ public class Cadastro extends AppCompatActivity {
                 myCalendar.get(Calendar.MONTH),
                 myCalendar.get(Calendar.DAY_OF_MONTH))
                 .show());
-
-        db = new AmeacasSQLiteDatabase(getBaseContext());
     }
 
     public void addAmeaca(View v) {
@@ -50,8 +53,10 @@ public class Cadastro extends AppCompatActivity {
         ameaca.setData(txtData.getText().toString());
         ameaca.setEndereco(txtEndereco.getText().toString());
 
-        db.addAmeaca(ameaca);
-        setResult(Activity.RESULT_OK);
+        String key = ameacas.push().getKey();
+        System.out.println("key - " + key);
+        System.out.println("ameaca - " + ameaca.toString());
+        ameacas.child(key).setValue(ameaca);
         finish();
     }
     public void updateLabel(){

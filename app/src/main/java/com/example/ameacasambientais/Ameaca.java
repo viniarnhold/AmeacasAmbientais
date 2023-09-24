@@ -1,10 +1,11 @@
 package com.example.ameacasambientais;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Ameaca {
-    private Long id;
+public class Ameaca implements Serializable {
+    private String key;
     private String endereco;
     private String data;
     private String descricao;
@@ -12,19 +13,11 @@ public class Ameaca {
     public Ameaca() {
     }
 
-    public Ameaca(Long id, String endereco, String data, String descricao) {
-        this.id = id;
+    public Ameaca(String key, String endereco, String data, String descricao) {
+        this.key = key;
         this.endereco = endereco;
         this.data = data;
         this.descricao = descricao;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getEndereco() {
@@ -51,10 +44,18 @@ public class Ameaca {
         this.descricao = descricao;
     }
 
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
     @Override
     public String toString() {
         return "Ameaca{" +
-                "id=" + id +
+                "key=" + key +
                 ", endereco='" + endereco + '\'' +
                 ", data='" + data + '\'' +
                 ", descricao='" + descricao + '\'' +

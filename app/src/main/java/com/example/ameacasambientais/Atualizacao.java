@@ -9,6 +9,9 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -17,7 +20,10 @@ public class Atualizacao extends AppCompatActivity {
 
     EditText txtDescricao, txtData, txtEndereco;
 
-    AmeacasSQLiteDatabase db;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference root = database.getReference();
+    DatabaseReference ameacas = root.child(MainActivity.AMEACAS_KEY);
+    String key;
     Ameaca ameaca;
     Calendar myCalendar;
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -29,10 +35,9 @@ public class Atualizacao extends AppCompatActivity {
         txtData = findViewById(R.id.editTextEdicaoDate);
         txtEndereco = findViewById(R.id.editTextEdicaoEndereco);
 
-        db = new AmeacasSQLiteDatabase(getBaseContext());
-        Long id = getIntent().getLongExtra("ID", 0);
+        key = getIntent().getStringExtra("KEY");
 
-        ameaca = db.getAmeaca(id);
+        ameaca = (Ameaca) getIntent().getSerializableExtra("STD");
 
         myCalendar = Calendar.getInstance();
         try {
@@ -62,8 +67,7 @@ public class Atualizacao extends AppCompatActivity {
         ameaca.setDescricao(txtDescricao.getText().toString());
         ameaca.setData(txtData.getText().toString());
         ameaca.setEndereco(txtEndereco.getText().toString());
-        db.updateAmeaca(ameaca);
-        setResult(Activity.RESULT_OK);
+        ameacas.child(key).setValue(ameaca);
         finish();
     }
     public void updateLabel(){
